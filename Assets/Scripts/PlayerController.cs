@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private float moveInput;
-
+    private bool canMove = true;
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -16,6 +17,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!canMove)
+        {
+            moveInput = 0f;
+            return;
+        }
+
         moveInput = 0f;
         
         if (Keyboard.current == null) return;
@@ -26,5 +33,16 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+    }
+    
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+
+        if (!canMove)
+        {
+            moveInput = 0f;
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
     }
 }
